@@ -1,0 +1,126 @@
+---
+title: "Customer Segmentation Analysis"
+author: "Sanath R"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(cluster)
+```
+
+## Customer Segmentation Analysis
+
+This project demonstrates how to segment customers based on their purchasing behavior using K-means clustering.
+
+### Data Preparation
+
+```{r data-prep}
+# Generate sample customer data
+set.seed(456)
+n <- 200
+customer_data <- data.frame(
+  CustomerID = 1:n,
+  AnnualIncome = rnorm(n, mean = 60000, sd = 15000),
+  SpendingScore = rnorm(n, mean = 50, sd = 25),
+  Age = rnorm(n, mean = 35, sd = 12),
+  LoyaltyYears = runif(n, 0, 10)
+)
+
+# Scale the data for clustering
+customer_scaled <- scale(customer_data[, c("AnnualIncome", "SpendingScore", "Age", "LoyaltyYears")])
+```
+
+### Determining Optimal Number of Clusters
+
+```{r optimal-clusters, fig.width=8, fig.height=5}
+# Calculate WSS for different k values
+wss <- sapply(1:10, function(k) {
+  kmeans(customer_scaled, centers = k, nstart = 25)$tot.withinss
+})
+
+# Plot elbow curve
+ggplot(data.frame(k = 1:10, wss = wss), aes(x = k, y = wss)) +
+  geom_line() +
+  geom_point() +
+  theme_minimal() +
+  labs(
+    title = "Elbow Method for Optimal k",
+    x = "Number of Clusters (k)",
+    y = "Total Within Sum of Squares"
+  )
+```
+
+Based on the elbow curve, we'll use k=4 for our clustering.
+
+### K-means Clustering
+
+```{r kmeans, fig.width=9, fig.height=6}
+# Perform k-means clustering
+k <- 4
+km_result <- kmeans(customer_scaled, centers = k, nstart = 25)
+
+# Add cluster assignment to original data
+customer_data$Cluster <- as.factor(km_result$cluster)
+
+# Visualize clusters
+ggplot(customer_data, aes(x = AnnualIncome, y = SpendingScore, color = Cluster)) +
+  geom_point(size = 3, alpha = 0.7) +
+  theme_minimal() +
+  labs(
+    title = "Customer Segments",
+    x = "Annual Income",
+    y = "Spending Score",
+    color = "Cluster"
+  ) +
+  scale_color_brewer(palette = "Set1")
+```
+
+### Customer Segment Profiles
+
+```{r segment-profiles}
+# Calculate segment profiles
+segment_profiles <- customer_data %>%
+  group_by(Cluster) %>%
+  summarise(
+    Count = n(),
+    AvgIncome = mean(AnnualIncome),
+    AvgSpending = mean(SpendingScore),
+    AvgAge = mean(Age),
+    AvgLoyalty = mean(LoyaltyYears)
+  )
+
+# Display segment profiles
+knitr::kable(segment_profiles, digits = 2)
+```
+
+### Marketing Recommendations
+
+Based on the customer segmentation analysis, I recommend the following marketing strategies:
+
+1. **Cluster 1: High Income, High Spenders**
+   - Premium product offerings
+   - Exclusive loyalty programs
+   - Personalized concierge service
+
+2. **Cluster 2: High Income, Low Spenders**
+   - Targeted promotions to increase spending
+   - Value proposition messaging
+   - Product education campaigns
+
+3. **Cluster 3: Low Income, High Spenders**
+   - Flexible payment options
+   - Mid-tier product recommendations
+   - Referral incentives
+
+4. **Cluster 4: Low Income, Low Spenders**
+   - Entry-level product focus
+   - Special discounts and offers
+   - Community-building initiatives
+
+### Conclusion
+
+This segmentation approach allows for more targeted marketing strategies, potentially increasing customer lifetime value and improving marketing ROI. 
