@@ -1,2 +1,0 @@
-cd Please add a real image file named "profile.jpg" to this directory.
-The file should be a valid JPG, PNG, or GIF image format. 
