@@ -1,0 +1,5 @@
+Position,Company,Location,Start_Date,End_Date,Description
+Senior Data Scientist,TechCorp Inc.,New York,2020-01,Present,"Led a team of 3 data scientists in developing predictive models for customer churn reduction. Implemented machine learning solutions that improved customer retention by 15%."
+Data Analyst,Analytics Partners,Boston,2018-03,2019-12,"Conducted statistical analysis on large datasets to identify business opportunities. Created interactive dashboards using R Shiny that are used by executive leadership for decision making."
+Research Assistant,University Research Lab,Chicago,2016-09,2018-02,"Assisted in research projects focused on statistical methods in healthcare data. Published 2 papers in peer-reviewed journals on predictive modeling in patient outcomes."
+Data Science Intern,StartUp Solutions,San Francisco,2016-05,2016-08,"Developed data cleaning and preprocessing pipelines. Created visualizations to communicate findings to non-technical stakeholders." 
