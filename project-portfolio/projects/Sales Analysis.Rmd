@@ -1,0 +1,68 @@
+---
+title: "Sales Analysis Project"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+```
+
+## Sales Analysis Project
+
+This project demonstrates analysis of sales data across different regions and product categories.
+
+### Overview
+
+In this project, I analyzed sales data to identify trends and patterns that could help improve business performance.
+
+### Data Visualization
+
+```{r sales-viz, fig.width=8, fig.height=5}
+# Sample data creation
+set.seed(123)
+regions <- c("North", "South", "East", "West")
+categories <- c("Electronics", "Clothing", "Food", "Home Goods")
+
+sales_data <- expand.grid(
+  Region = regions,
+  Category = categories,
+  Year = 2018:2022
+)
+
+sales_data$Sales <- runif(nrow(sales_data), 10000, 100000)
+
+# Create a bar chart
+ggplot(sales_data, aes(x = Year, y = Sales, fill = Region)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ Category) +
+  theme_minimal() +
+  labs(
+    title = "Sales by Region and Category",
+    x = "Year",
+    y = "Sales ($)",
+    fill = "Region"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Key Findings
+
+1. The West region consistently outperforms other regions in Electronics sales
+2. Food category shows the most stable growth across all regions
+3. Clothing sales experienced a significant drop in 2020 but recovered strongly in 2021
+
+### Recommendations
+
+Based on the analysis, I recommend:
+
+1. Increasing marketing efforts in the South region for Electronics
+2. Exploring the success factors in the West region to apply to other regions
+3. Developing a more resilient supply chain for the Clothing category
+
+### Conclusion
+
+This analysis provides actionable insights that can help optimize sales strategies across different regions and product categories. 
